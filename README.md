@@ -1,125 +1,137 @@
-# Metabolomics Workflow — Workshop Notebook
+# Computational Metabolomics (Computer Lab Module in BIO513)
 
-This repository contains a Jupyter notebook for end-to-end analysis of untargeted metabolomics data. It was developed for use in the BIO513 Systems Biology course at the University of Gothenburg and covers the full analytical pipeline from raw feature table to statistical results and visualisations.
+## The Lab
 
----
+The aim of this lab is to gain practical insight into metabolomics by reading the article:
 
-## Overview
+> Mickiewicz B. *et al.* (2012). *NMR-based metabolic profiling provides diagnostic and prognostic information in critically ill children with suspected infection.* **Critical Care** 16:R172. https://doi.org/10.1186/cc11us
 
-The notebook walks through a standard metabolomics analysis workflow in a single, configurable pipeline:
+and analysing the corresponding dataset `children_infection.csv` using Python.
 
-| Step | Description |
-|---|---|
-| Data loading | Reads a CSV feature table with sample metadata and metabolite abundances |
-| Preprocessing | Missing value imputation, normalisation, log transformation, and scaling |
-| Univariate analysis | t-test and/or Mann-Whitney U test with Benjamini-Hochberg FDR correction |
-| Volcano plot | Visual summary of fold change vs. statistical significance |
-| PCA | Principal component analysis with scores plot and biplot |
-| OPLS-DA | Supervised multivariate classification with permutation testing, VIP scores, and S-plot |
-| Visualisations | Boxplots for top metabolites, metabolite and sample correlation heatmaps, abundance heatmap |
-| PDF report | Automated summary report of all results |
+The lab has three steps:
 
----
+1. **Read** the relevant parts of the article and try to understand what analyses were performed and what the main findings were.
+2. **Apply** the uni- and multivariate methods you have learnt on the same data using Python. A notebook (`metabolomics_workflow_notebook.ipynb`) is provided as a starting point or source of inspiration — use of it is optional. Additional guidance on how the workflow operates and how to run it outside of a Jupyter Notebook is available in `Guide_to_Metabolomics_Workflow.docx`.
+3. **Compare** your results with the article and discuss similarities, differences, and possible reasons for them.
 
-## Dataset
+You are free to perform any relevant analyses. However, since PCA and OPLS-DA are standard methods in metabolomics, you are encouraged to include them. Univariate analysis should also be performed.
 
-The example dataset used in this notebook is `children_infection_control_primary_53_64_125.csv`, a primary metabolomics dataset comparing children with infection vs. healthy controls.
-
-> The data file is not tracked in this repository. Place it in the same directory as the notebook before running.
+> **Note on software:** R is more commonly used in metabolomics research due to the availability of specialised packages. Here we use Python, which gives you more flexibility in how you structure the analysis.
 
 ---
 
-## Requirements
+## The Dataset
 
-Install the required packages with:
+The dataset contains ¹H NMR urine metabolite profiles from children admitted to a paediatric intensive care unit (PICU), across three groups: **Infection**, **SIRS** (systemic inflammatory response without confirmed infection), and **Control** (healthy children).
 
-```bash
-pip install pandas numpy matplotlib scipy scikit-learn
-```
+> ⚠️ **Data preparation:** The workflow notebook requires exactly **two groups**. Before running, filter `children_infection.csv` to the two groups you want to compare (e.g. Infection vs. Control) — either in Excel or by modifying the `KEEP_GROUPS` variable in the notebook configuration cell.
 
 ---
 
-## How to Use
-
-1. Clone this repository:
-
-```bash
-git clone <repo-url>
-cd <repo-folder>
-```
-
-2. Place your data file in the repository folder.
-
-3. Open the notebook:
-
-```bash
-jupyter notebook metabolomics_workflow_notebook.ipynb
-```
-
-4. Update the **Configuration** cell at the top of the notebook to match your data:
-
-```python
-input_file        = "your_data.csv"   # path to your CSV file
-sample_col        = None              # column name for sample IDs (None = auto-detect first column)
-group_col         = None              # column name for group labels (None = auto-detect second column)
-normalization     = "pqn"             # none | total_sum | pqn
-log_transform     = "log2"            # none | log2 | log10 | ln
-scaling           = "pareto"          # none | uv | pareto
-univariate_method = "both"            # t_test | mannwhitney | both
-```
-
-5. Run all cells from top to bottom (**Cell → Run All**).
-
----
-
-## Input Data Format
-
-The CSV file must follow this structure:
-
-| sample_id | group | metabolite_1 | metabolite_2 | ... |
-|---|---|---|---|---|
-| S01 | control | 1234.5 | 567.8 | ... |
-| S02 | infection | 2345.6 | 432.1 | ... |
-
-- **Column 1:** Sample identifiers
-- **Column 2:** Group labels (exactly two groups for OPLS-DA)
-- **Columns 3+:** Numeric metabolite abundances (missing values allowed)
-
----
-
-## Outputs
-
-All results are saved to the `results/` folder (created automatically):
+## Repository Contents
 
 | File | Description |
 |---|---|
-| `processed_data.csv` | Normalised and scaled abundance matrix |
-| `transformed_unscaled_data.csv` | Log-transformed but unscaled matrix |
-| `univariate_results.csv` | Full univariate statistics table |
-| `volcano_plot_data.csv` | Data underlying the volcano plot |
-| `pca_scores.csv` | PCA scores per sample |
-| `oplsda_splot_data.csv` | S-plot correlation and covariance values |
-| `metabolite_correlation_matrix_clustered.csv` | Clustered metabolite correlation matrix |
-| `sample_correlation_matrix_clustered.csv` | Clustered sample correlation matrix |
-| `metabolomics_report.pdf` | Automated PDF report with all figures |
-| `run_metadata.json` | Record of all parameters used in the run |
-| `boxplots/` | Individual boxplots for top significant metabolites |
+| `metabolomics_workflow_notebook.ipynb` | Jupyter notebook — full analysis pipeline as a starting point |
+| `Guide_to_Metabolomics_Workflow.docx` | Guide explaining the workflow and how to run it from the command line |
+| `children_infection.csv` | NMR metabolite dataset (all three groups) |
 
 ---
 
-## Analysis Parameters
+## Getting Started
 
-| Parameter | Default | Options | Description |
-|---|---|---|---|
-| `normalization` | `pqn` | `none`, `total_sum`, `pqn` | Sample normalisation method |
-| `log_transform` | `log2` | `none`, `log2`, `log10`, `ln` | Log transformation |
-| `scaling` | `pareto` | `none`, `uv`, `pareto` | Feature scaling |
-| `univariate_method` | `both` | `t_test`, `mannwhitney`, `both` | Statistical test |
-| `pca_components` | `5` | integer ≥ 2 | Number of PCA components |
-| `opls_components` | `1` | integer ≥ 1 | Number of OPLS-DA components |
-| `cv_folds` | `5` | integer ≥ 2 | Cross-validation folds |
-| `outer_cv_folds` | `0` | integer; 0 = skip | Outer folds for nested CV |
-| `permutations` | `200` | integer | Permutations for OPLS-DA validation |
-| `p_threshold` | `0.05` | float | Significance threshold for volcano plot |
-| `fc_threshold` | `1.0` | float | Fold change threshold (log2 scale) |
-| `corr_method` | `pearson` | `pearson`, `spearman` | Correlation method for heatmaps |
+### Option A — Google Colab (recommended, no installation required)
+
+1. Go to [colab.research.google.com](https://colab.research.google.com), choose **File → Open notebook → GitHub**, and paste this repository URL.
+
+2. Run the **Setup → Step 1** cell to install packages. When prompted, go to **Runtime → Restart session**.
+
+3. Run the **Step 2** cell — `children_infection.csv` will be downloaded automatically from GitHub into your Colab session.
+
+> ⚠️ Colab sessions are temporary. Download any output files you want to keep before closing the session.
+
+### Option B — Local Jupyter
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/UjalaBashir/Bio513_metabolomics.git
+cd Bio513_metabolomics
+```
+
+2. Install dependencies:
+
+```bash
+pip install pandas numpy matplotlib scipy scikit-learn seaborn
+```
+
+3. Launch Jupyter and open the notebook:
+
+```bash
+jupyter notebook
+```
+
+---
+
+## Output Files
+
+All results are saved to a `results/` folder created automatically when you run the notebook:
+
+| File | Description |
+|---|---|
+| `processed_data.csv` | Imputed, normalised, log-transformed and scaled matrix (used for PCA and OPLS-DA) |
+| `transformed_unscaled_data.csv` | Normalised and log-transformed but not scaled (used for univariate analysis and boxplots) |
+| `pqn_dilution_factors.csv` | Per-sample PQN dilution factors |
+| `univariate_results.csv` | Full table of t-test and Mann-Whitney statistics with FDR correction |
+| `volcano.png` | Volcano plot |
+| `boxplots/` | Individual boxplots for top-ranked metabolites |
+| `pca_scores.png` / `pca_biplot.png` | PCA scores plot and biplot |
+| `oplsda_scores.png` / `oplsda_splot.png` | OPLS-DA scores plot and S-plot |
+| `oplsda_vip.png` | VIP bar plot |
+| `oplsda_permutation_q2.png` | Permutation test histogram |
+| `metabolomics_report.pdf` | Automated PDF report with all figures and settings |
+
+---
+
+## Group Work
+
+The lab is designed to be completed in **groups of 2–3 students**. Groups should:
+
+- Divide exploration tasks (e.g. one person runs OPLS-DA while another builds the volcano plot)
+- Discuss exercise answers together before writing them up individually
+- Collaborate on interpreting results but submit individual reports
+
+All group members should be able to explain every step of the analysis.
+
+---
+
+## Report Guidelines
+
+Submit one report per student, written as a **short scientific paper** (approximately 1500–2500 words, excluding figures). The report should present your results and compare methods and relevant findings with those reported in the original article. Discuss your results in relation to the study's conclusions.
+
+### Structure
+
+| Section | Content |
+|---|---|
+| **Introduction** | Brief background on NMR metabolomics, the clinical context, and the aim of your analysis |
+| **Methods** | Preprocessing choices with justification; statistical tests; multivariate modelling; validation strategy |
+| **Results** | Univariate findings, PCA, OPLS-DA performance and top metabolites — reference your figures |
+| **Discussion** | Biological interpretation of top metabolites; comparison with Mickiewicz *et al.*; limitations |
+
+### Figures
+
+Include at least **four figures** with captions:
+
+1. Volcano plot
+2. PCA scores plot
+3. OPLS-DA scores plot and permutation test
+4. VIP plot or S-plot
+5. *(Optional)* Boxplots of top metabolites or clustered heatmap
+
+### Assessment criteria
+
+- Correct execution and interpretation of the analyses
+- Quality and clarity of figures and captions
+- Depth of biological interpretation and connection to the original article
+- Critical discussion of methodological choices and their limitations
+- Clarity of writing
