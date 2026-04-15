@@ -102,7 +102,7 @@ The lab is designed to be completed in same groups as your seminar. Groups shoul
 
 ## Report Guidelines
 
-Submit one report per student, written as a **short scientific paper** (approximately 1500–2500 words, excluding figures). Present your results and compare methods and findings with those reported in the original article. Discuss your results in relation to the study's conclusions.
+Submit one report per group, written as a **short scientific paper** (approximately 1500–2500 words, excluding figures). Present your results and compare methods and findings with those reported in the original article. Discuss your results in relation to the study's conclusions.
 
 ### Structure
 
