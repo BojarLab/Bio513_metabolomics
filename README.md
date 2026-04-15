@@ -4,7 +4,7 @@
 
 The aim of this lab is to gain practical insight into metabolomics by reading the article:
 
-> Mickiewicz B. *et al.* (2012). *NMR-based metabolic profiling provides diagnostic and prognostic information in critically ill children with suspected infection.* **Critical Care** 16:R172. https://doi.org/10.1038/s41598-020-77319-0
+> Mickiewicz B. *et al.* (2020). *NMR-based metabolic profiling provides diagnostic and prognostic information in critically ill children with suspected infection.* **Critical Care** 16:R172. https://doi.org/10.1038/s41598-020-77319-0
 
 and analysing the corresponding dataset `children_infection.csv` using Python.
 
