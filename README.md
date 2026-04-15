@@ -57,7 +57,7 @@ The dataset `children_infection.csv` contains ¹H NMR urine metabolite profiles 
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/UjalaBashir/Bio513_metabolomics.git
+git clone https://github.com/BojarLab/Bio513_metabolomics.git
 cd Bio513_metabolomics
 ```
 
