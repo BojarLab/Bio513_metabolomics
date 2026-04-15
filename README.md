@@ -93,11 +93,11 @@ Each block saves output files that are used as input in the next block:
 
 ## Group Work
 
-The lab is designed to be completed in **groups of 2–3 students**. Groups should:
+The lab is designed to be completed in same groups as your seminar. Groups should:
 
 - Divide tasks across the three blocks
-- Discuss results together before writing them up individually
-- Submit individual reports
+- Discuss results together before writing them 
+- Submit one group report
 
 ---
 
